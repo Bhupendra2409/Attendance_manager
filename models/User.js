@@ -3,12 +3,19 @@ const bcrypt = require('bcryptjs');
 
 
 const UserSchema = new mongoose.Schema({
-    username:{
-        type:String,
-        required : [true,"Please provide a username"],
-        min:3,
-        max:20,
+    orgId:{
+        type:Number,
+        required : [true,"Please provide a orgId"],
+        // min:3,
+        // max:20,
         unique:true
+    },
+    name:{
+        type:String,
+        required : [true,"Please provide a name"],
+        // min:3,
+        // max:20,
+        // unique:true
     },
     email:{
         type:String,
@@ -23,42 +30,42 @@ const UserSchema = new mongoose.Schema({
         minlength:6,
         select: false
     },
-    profilePicture:{
-        type:String,
-        default:""
-    },
-    coverPicture:{
-        type:String,
-        default:""
-    },
-    followers:{
-        type:Array,
-        default:[]
-    },
-    followings:{
-        type:Array,
-        default:[]
-    },
+    // profilePicture:{
+    //     type:String,
+    //     default:""
+    // },
+    // coverPicture:{
+    //     type:String,
+    //     default:""
+    // },
+    // followers:{
+    //     type:Array,
+    //     default:[]
+    // },
+    // followings:{
+    //     type:Array,
+    //     default:[]
+    // },
     isAdmin:{
         type:Boolean,
         default:false,
     },
-    desc:{
-        type:String,
-        max:50,
-    },
-    city:{
-        type:String,
-        max:50
-    },
-    from:{
-        type:String,
-        max:50
-    },
-    relationship:{
-        type:Number,
-        enum:[1,2,3]
-    }
+    // desc:{
+    //     type:String,
+    //     max:50,
+    // },
+    // city:{
+    //     type:String,
+    //     max:50
+    // },
+    // from:{
+    //     type:String,
+    //     max:50
+    // },
+    // relationship:{
+    //     type:Number,
+    //     enum:[1,2,3]
+    // }
 },
 {timestamps:true}
 )
@@ -74,5 +81,5 @@ UserSchema.methods.matchPassword  = async function(password){
     return await bcrypt.compare(password,this.password)
 }
 
-module.exports= mongoose.model('users',UserSchema);
+module.exports= mongoose.model('accounts',UserSchema);
  

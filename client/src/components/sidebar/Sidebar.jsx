@@ -1,53 +1,30 @@
 import  './sidebar.css'
-import {RssFeed,Chat,VideoLibrary,Bookmark,PeopleAlt,HelpOutline,Work,Event} from '@material-ui/icons'
-import CloseFriend from '../closeFriend/CloseFriend'
-import {Users} from '../../dummyData'
+import {InfoRounded,Pages} from '@material-ui/icons'
+
+import { setView } from "../../appSlice";
+
+import { useDispatch,useSelector } from 'react-redux';
 
 export default function Sidebar() {
+    const user = useSelector(state=>state.appSlice.user)
+    // console.log(user)
+    const dispatch = useDispatch();
+
     return (
         <div className='sidebar'>
             <div className="sidebarWrapper">
                 <ul className="sidebarList">
-                    <li className="sidebarListItem">
-                        <RssFeed className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Feed</span>
+                    <li className="sidebarListItem" onClick={()=>dispatch(setView("request"))}>
+                        <InfoRounded className='sidebarIcon'/>
+                        <span className="sidebarListItemText">Request</span>
                     </li>
                     <li className="sidebarListItem">
-                        <Chat className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Chats</span>
+                        <Pages className='sidebarIcon'/>
+                        <span className="sidebarListItemText" onClick={()=>dispatch(setView("attendance"))} >Attendance</span>
                     </li>
-                    <li className="sidebarListItem">
-                        <VideoLibrary className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Videos</span>
-                    </li>
-                    <li className="sidebarListItem">
-                        <PeopleAlt className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Groups</span>
-                    </li>
-                    <li className="sidebarListItem">
-                        <Bookmark className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Bookmarks</span>
-                    </li>
-                    <li className="sidebarListItem">
-                        <HelpOutline className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Questions</span>
-                    </li>
-                    <li className="sidebarListItem">
-                        <Work className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Jobs</span>
-                    </li>
-                    <li className="sidebarListItem">
-                        <Event className='sidebarIcon'/>
-                        <span className="sidebarListItemText">Events</span>
-                    </li>
+                    
                 </ul>
-                <button className="sidebarButton button">More</button>
-                <hr className='sidebarHr'/>
-                <ul className="sidebarFriendList">
-                    {Users.map(u=>(
-                        <CloseFriend key={u.id} user={u}/>
-                    ))}
-                </ul>
+                
             </div>
         </div>
     )

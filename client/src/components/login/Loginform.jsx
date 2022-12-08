@@ -1,35 +1,30 @@
 import React, { useState, useEffect , useRef } from "react";
 import "./login.css";
-import { loginCall } from "../../apiCalls";
-import { useContext } from "react";
-import {AuthContext} from "../../context/AuthContext"
-import {CircularProgress} from "@material-ui/core"
 
-import {auth} from '../../firebaseconfig'
-import {signInWithEmailAndPassword } from "firebase/auth";
+import Config from "../../Config";
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from "../../appSlice";
+
+import axios from "axios";
 
 export default function Loginform() {
  
+  const dispatch = useDispatch();
 
   const email = useRef();
   const password = useRef();
 
-  const {user, isFetching,error,dispatch} = useContext(AuthContext);
+  const user = useSelector((state) => state.appSlice.user);
 
-  const handleClick = (e)=>{
+  const handleClick = async (e)=>{
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-  .then((userCredential) => {
-
-    loginCall({email:email.current.value,password:password.current.value},dispatch)
-    // const user = userCredential.user;
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
-
+    
+    const res = await axios.post(Config.api+"auth/login",{
+      email:email.current.value,
+      password:password.current.value
+    })
+    dispatch(setUser(res.data.user))
     
   }
   return (
@@ -50,12 +45,12 @@ export default function Loginform() {
         ref={password}
       />
 
-      <button disabled={isFetching} type="submit" className="login-page-btn login-btn btn-success btn">
-        {isFetching ?<CircularProgress  size="1rem" className="circularProgress"/>:"Login"}
+      <button  type="submit" className="login-page-btn login-btn btn-success btn">
+        {"Login"}
       </button>
-      <button type="submit" className="login-page-btn btn mt-2">
+      {/* <button type="submit" className="login-page-btn btn mt-2">
         Forgot password?
-      </button>
+      </button> */}
     </form>
   );
 }

@@ -11,7 +11,8 @@ const {ServerApiVersion} = require('mongodb');
 
 const userRoute = require('./routes/user');
 const authRoute = require('./routes/auth');
-const postRoute = require('./routes/posts');
+const attendanceRoute = require('./routes/attendance');
+// const postRoute = require('./routes/posts');
 dotenv.config();
  
 
@@ -44,15 +45,16 @@ app.use(function(req,res,next){
 
 app.use('/api/user',userRoute)
 app.use('/api/auth',authRoute)
-app.use('/api/posts',postRoute)
+app.use('/api/attendance',attendanceRoute)
+// app.use('/api/posts',postRoute)
 
 
 // app.use(express.static(path.join(__dirname+"/public")))
 
-mongoose.connect(process.env.MONGO_URL,{useUnifiedTopology: true, serverApi: ServerApiVersion.v1, dbName: 'konekt',useNewUrlParser: true})
+mongoose.connect(process.env.MONGO_URL,{useUnifiedTopology: true, serverApi: ServerApiVersion.v1, dbName: 'attendance',useNewUrlParser: true})
 .then(()=>{
-    app.listen(process.env.PORT || 8000,()=>{
-        console.log("server running");
+    app.listen(process.env.PORT,()=>{
+        console.log("server running at port ", process.env.PORT);
     })
 }).catch((err)=>console.log(err) );
 

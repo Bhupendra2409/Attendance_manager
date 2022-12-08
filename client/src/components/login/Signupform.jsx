@@ -1,22 +1,21 @@
-import React, { useRef, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { loginCall } from "../../apiCalls";
-import { CircularProgress } from "@material-ui/core";
+import React, { useRef } from "react";
+
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import {auth} from '../../firebaseconfig'
+import {useDispatch} from 'react-redux'
+import { setUser } from "../../appSlice";
+
+import Config from "../../Config";
 
 export default function Signupform({ setStatus }) {
-  const username = useRef();
+  const dispatch = useDispatch();
+
   const email = useRef();
+  const name = useRef();
+  const orgId = useRef();
   const password = useRef();
   const confirmPassword = useRef();
-
-  const navigate = useNavigate();
-
-  const { user, isFetching, error, dispatch } = useContext(AuthContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -25,34 +24,15 @@ export default function Signupform({ setStatus }) {
     }
     else {
       const user = {
-        username: username.current.value,
+        name: name.current.value,
         email: email.current.value,
         password: password.current.value,
+        orgId:orgId.current.value
       }
 
-      
-
-      try {
-
-        createUserWithEmailAndPassword(auth, user.email, user.password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          console.log(user)
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // ..
-        });
-
-        await axios.post("/auth/register", user);
-        setStatus("Login");
-      }
-      catch (err) {
-        console.log(err);
-      }
+      const res = await axios.post(Config.api+"auth/register",user)
+      console.log(res.data)
+      dispatch(setUser(res.data))
 
     }
   };
@@ -64,8 +44,15 @@ export default function Signupform({ setStatus }) {
           className="px-2 mt-2"
           required
           type="text"
-          placeholder="Enter username"
-          ref={username}
+          placeholder="Enter name"
+          ref={name}
+        />
+        <input
+          className="px-2 mt-2"
+          required
+          type="text"
+          placeholder="Enter organisation id"
+          ref={orgId}
         />
         <input
           className="px-2 mt-2"
@@ -93,9 +80,8 @@ export default function Signupform({ setStatus }) {
       <button
         type="submit"
         className="login-page-btn login-btn btn-success btn"
-        disabled={isFetching}
       >
-        {isFetching ? <CircularProgress size='1rem' /> : "Signup"}
+        {"Signup"}
       </button>
     </form>
   );

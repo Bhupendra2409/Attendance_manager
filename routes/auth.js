@@ -6,10 +6,11 @@ const ErrorResponse = require("../utils/errorResponse");
 
 //register
 router.post("/register", async (req, res, next) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { name,orgId, email, password } = req.body;
+  if (!orgId || !email || !password || !name) {
+    // console.log(orgId,email,password,name);
     return next(
-      new ErrorResponse("Provide valid username,email,password", 400)
+      new ErrorResponse("Provide valid name,orgId,email,password", 400)
     );
   }
   try {
@@ -18,11 +19,12 @@ router.post("/register", async (req, res, next) => {
       return next(new ErrorResponse("Already registered!", 400));
     } else {
       const newUser = await User.create({
-        username,
+        name,
+        orgId,
         email,
         password,
       });
-
+      // console.log(newUser);
       res.status(200).json(newUser);
     }
   } catch (error) {

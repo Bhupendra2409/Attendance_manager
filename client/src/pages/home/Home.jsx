@@ -1,17 +1,20 @@
-import Feed from "../../components/feed/Feed";
-import Rightbar from "../../components/rightbar/Rightbar";
+
+import Attendance from "../../components/attendance/Attendance";
 import Sidebar from "../../components/sidebar/Sidebar";
+import History from "../../components/attendance/History";
 import Topbar from "../../components/topbar/Topbar";
+
 import './home.css'
+import 'react-calendar/dist/Calendar.css';
 
 export default function Home() {
     return (
         <>
        <Topbar/>
-       <div className="homeCnt">
+       <div className="container">
        <Sidebar/>
-       <Feed show={true}/>
-        <Rightbar show={true}/>
+       <Attendance/>
+       {/* <History/> */}
        </div>
         </>
        
